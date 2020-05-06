@@ -14,12 +14,13 @@
       </div>
       <div class="tabs-body">
         <div class="tabs-col">
-          <LabeledInput label="Кол-во"/>
-          <LabeledInput label="Цена"/>
+          <LabeledInput type="text" label="Кол-во" v-bind:value.sync="countBtc"/>
+          <LabeledInput type="currency" label="Цена" v-bind:value.sync="sumUsd"/>
         </div>
         <div class="tabs-col">
-          <LabeledInput label="Комиссия"/>
-          <LabeledInput label="Цена"/>
+          <LabeledInput type="currency" label="Комиссия" v-bind:value.sync="feeUsd"/>
+          {{feeUsd}}
+          <button v-on:click="addTransaction({sumUsd, countBtc, feeUsd})">text</button>
         </div>
       </div>
     </div>
@@ -28,15 +29,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { TransactionTypeEnum } from '@/enums';
 import Button from '@/components/Button.vue';
 import LabeledInput from '@/components/LabeledInput.vue';
+import { mapMutations } from 'vuex';
 
 @Component({
   components: {
     Button,
     LabeledInput,
+  },
+  methods: {
+    ...mapMutations(['addTransaction']),
   },
 })
 export default class TransactionsForm extends Vue {
@@ -44,9 +49,20 @@ export default class TransactionsForm extends Vue {
 
   transactionType = TransactionTypeEnum.Buy;
 
+  countBtc = null;
+
+  sumUsd = null;
+
+  public feeUsd = 0;
+
   onChangeTransactionType(transactionType: TransactionTypeEnum): void {
     this.transactionType = transactionType;
     console.log(transactionType);
+  }
+
+  onUpdate1(event: string): void{
+    this.feeUsd = parseInt(event, 10);
+    console.log(event, '1', this);
   }
 }
 </script>

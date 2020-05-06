@@ -9,7 +9,7 @@
     </div>
     <div class="col">
       <p class="title">
-        Количество BTC: {{sum}}
+        Количество BTC: {{totalBtc}}
       </p>
     </div>
   </div>
@@ -17,8 +17,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mapGetters, mapMutations, mapState } from 'vuex';
 
-@Component
+@Component({
+  computed: mapState({
+    totalBtc: (state: any): number => state.totalBtc,
+  }),
+})
 export default class TransactionsInfo extends Vue {
   @Prop() private sum!: number;
 }

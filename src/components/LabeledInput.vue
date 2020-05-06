@@ -1,16 +1,42 @@
 <template>
   <div class="wrap">
     <label>{{label}}</label>
-    <input class="input" type="text" value="10000"/>
+    <input v-if="type==='currency'"
+           class="input"
+           type="text"
+           v-model="syncedValue"
+           v-money="money"/>
+    <input v-if="type==='text'"
+           class="input"
+           type="text"
+           v-model="syncedValue"/>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  PropSync,
+  Vue,
+} from 'vue-property-decorator';
 
 @Component
 export default class LabeledInput extends Vue {
   @Prop() private label!: string;
+
+  @Prop() private type!: string;
+
+  @PropSync('value', { type: Number }) public syncedValue!: number;
+
+  price = 2000
+
+  money = {
+    decimal: ',',
+    thousands: ' ',
+    prefix: '$ ',
+    precision: 2,
+  }
 }
 </script>
 

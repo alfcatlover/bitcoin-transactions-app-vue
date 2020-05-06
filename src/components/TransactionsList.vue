@@ -10,13 +10,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="n in 3" v-bind:key="n">
+      <tr v-for="transaction in transactions" v-bind:key="transaction.id">
         <td class="transactions-date">
           04.05.19
           <span class="small-text">16:31:28</span>
         </td>
         <td>Покупка</td>
-        <td>10</td>
+        <td>{transaction.date}</td>
         <td>$2</td>
         <td>
           $2
@@ -29,8 +29,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
 
-@Component
+@Component({
+  computed: mapState({
+    transactions: (state: any): Array<any> => state.transactions,
+  }),
+})
 export default class TransactionsList extends Vue {
 }
 </script>
