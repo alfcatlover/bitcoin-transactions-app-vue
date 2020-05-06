@@ -1,5 +1,5 @@
 <template>
-  <button class="button">
+  <button class="button" v-on:click="onClick">
     <slot></slot>
   </button>
 </template>
@@ -9,6 +9,10 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Button extends Vue {
+  onClick() {
+    console.log(111);
+    this.$emit('click');
+  }
 }
 </script>
 

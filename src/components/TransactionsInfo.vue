@@ -2,10 +2,10 @@
   <div class="wrap">
     <div class="col">
       <p class="title">
-        Количество USD: {{sum}}
+        Количество USD: {{totalUsd}}
       </p>
-      <p>Средняя цена покупки BTC: 0</p>
-      <p>Средняя цена продажи BTC: 0</p>
+      <p>Средняя цена покупки BTC: {{avgBuy}}</p>
+      <p>Средняя цена продажи BTC: {{avgSell}}</p>
     </div>
     <div class="col">
       <p class="title">
@@ -17,15 +17,19 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { mapGetters, mapMutations, mapState } from 'vuex';
+import { Getter, State } from 'vuex-class';
 
-@Component({
-  computed: mapState({
-    totalBtc: (state: any): number => state.totalBtc,
-  }),
-})
+@Component
 export default class TransactionsInfo extends Vue {
   @Prop() private sum!: number;
+
+  @State('totalUsd') totalUsd: number;
+
+  @State('totalBtc') totalBtc: number;
+
+  @State('avgBuy') avgBuy: number;
+
+  @State('avgSell') avgSell: number;
 }
 </script>
 

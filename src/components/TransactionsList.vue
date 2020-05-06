@@ -15,12 +15,12 @@
           04.05.19
           <span class="small-text">16:31:28</span>
         </td>
-        <td>Покупка</td>
-        <td>{transaction.date}</td>
-        <td>$2</td>
+        <td>{{transaction.type}}</td>
+        <td>{{transaction.quantityBtc}}</td>
+        <td>${{transaction.btcPrice}} </td>
         <td>
-          $2
-          <span class="small-text">Fee $1</span>
+          ${{transaction.btcPrice}}
+          <span class="small-text">Fee ${{transaction.feeUsd}}</span>
         </td>
       </tr>
     </tbody>
@@ -29,14 +29,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { mapState } from 'vuex';
+import { State } from 'vuex-class';
+import { TransactionModel } from '@/types';
 
-@Component({
-  computed: mapState({
-    transactions: (state: any): Array<any> => state.transactions,
-  }),
-})
+@Component
 export default class TransactionsList extends Vue {
+  @State('transactions') transactions: Array<TransactionModel>
 }
 </script>
 

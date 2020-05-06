@@ -3,66 +3,58 @@
     <div class="tabs">
       <div class="tabs-head">
         <div
-          v-bind:class="{active: transactionType === transactionTypeEnum.Buy}"
+          v-bind:class="{active: transaction.type === transactionTypeEnum.Buy}"
           v-on:click="onChangeTransactionType(transactionTypeEnum.Buy)" class="tabs-head-btn">
           покупка
         </div>
-        <div v-bind:class="{active: transactionType === transactionTypeEnum.Sell}"
+        <div v-bind:class="{active: transaction.type === transactionTypeEnum.Sell}"
              v-on:click="onChangeTransactionType(transactionTypeEnum.Sell)" class="tabs-head-btn">
           продажа
         </div>
       </div>
       <div class="tabs-body">
         <div class="tabs-col">
-          <LabeledInput type="text" label="Кол-во" v-bind:value.sync="countBtc"/>
-          <LabeledInput type="currency" label="Цена" v-bind:value.sync="sumUsd"/>
+          <LabeledInput type="text" label="Кол-во" v-bind:value.sync="transaction.quantityBtc"/>
+          <LabeledInput type="currency" label="Цена" v-bind:value.sync="transaction.btcPrice"/>
         </div>
         <div class="tabs-col">
-          <LabeledInput type="currency" label="Комиссия" v-bind:value.sync="feeUsd"/>
-          {{feeUsd}}
-          <button v-on:click="addTransaction({sumUsd, countBtc, feeUsd})">text</button>
+          <LabeledInput type="currency" label="Комиссия" v-bind:value.sync="transaction.feeUsd"/>
         </div>
       </div>
     </div>
-    <Button>Добавить</Button>
+    <Button v-on:click="onAddTransaction">Добавить</Button>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { TransactionTypeEnum } from '@/enums';
+import { TransactionModel } from '@/types';
 import Button from '@/components/Button.vue';
 import LabeledInput from '@/components/LabeledInput.vue';
-import { mapMutations } from 'vuex';
+import { Mutation, Action } from 'vuex-class';
 
 @Component({
   components: {
     Button,
     LabeledInput,
   },
-  methods: {
-    ...mapMutations(['addTransaction']),
-  },
 })
 export default class TransactionsForm extends Vue {
   readonly transactionTypeEnum = TransactionTypeEnum;
 
-  transactionType = TransactionTypeEnum.Buy;
+  transaction: TransactionModel = new TransactionModel();
 
-  countBtc = null;
-
-  sumUsd = null;
-
-  public feeUsd = 0;
+  @Action('addTransaction') addTransaction: any;
 
   onChangeTransactionType(transactionType: TransactionTypeEnum): void {
-    this.transactionType = transactionType;
+    this.transaction.type = transactionType;
     console.log(transactionType);
   }
 
-  onUpdate1(event: string): void{
-    this.feeUsd = parseInt(event, 10);
-    console.log(event, '1', this);
+  onAddTransaction() {
+    this.addTransaction(this.transaction);
+    this.transaction = new TransactionModel();
   }
 }
 </script>
