@@ -1,5 +1,5 @@
 <template>
-  <table class="transaction-table">
+  <table class="transactions">
     <thead>
       <tr>
         <th>Дата</th>
@@ -10,17 +10,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>
+      <tr v-for="n in 3" v-bind:key="n">
+        <td class="transactions-date">
           04.05.19
-          <time>16:31:28</time>
+          <span class="small-text">16:31:28</span>
         </td>
         <td>Покупка</td>
         <td>10</td>
         <td>$2</td>
         <td>
           $2
-          Fee $1
+          <span class="small-text">Fee $1</span>
         </td>
       </tr>
     </tbody>
@@ -36,13 +36,33 @@ export default class TransactionsList extends Vue {
 </script>
 
 <style scoped lang="scss">
-.transaction-table {
+.transactions {
+  width: 100%;
   th {
     font-style: normal;
     font-weight: normal;
     font-size: 11px;
     line-height: 14px;
+    text-align: left;
     text-transform: uppercase;
+    padding-bottom: 25px;
   }
+  td {
+    font-size: 16px;
+    padding-bottom: 24px;
+  }
+  tr:last-child {
+    td {
+      padding-bottom: 18px;
+    }
+  }
+}
+.transactions-date{
+  line-height: 1;
+}
+.small-text{
+  display: block;
+  font-size: 11px;
+  line-height: 14px;
 }
 </style>
