@@ -10,6 +10,10 @@ export class TransactionModel {
 
   date: Date;
 
+  // dateFormatted: string;
+
+  timeFormatted: string;
+
   type: TransactionTypeEnum;
 
   quantityBtc: number;

@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    startUsd: 100,
+    startUsd: 100000,
     transactions: [],
   } as AppState,
   mutations: {

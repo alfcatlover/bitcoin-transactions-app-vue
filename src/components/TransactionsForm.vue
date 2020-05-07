@@ -58,7 +58,6 @@ export default class TransactionsForm extends Vue {
   @Getter('totalBtc') totalBtc: number;
 
   get disabled() {
-    console.log('dis', this.transaction.btcPrice === 0 || this.transaction.quantityBtc === 0);
     return !this.transaction.btcPrice || !this.transaction.quantityBtc;
   }
 
@@ -83,7 +82,6 @@ export default class TransactionsForm extends Vue {
 
   onChangeTransactionType(transactionType: TransactionTypeEnum): void {
     this.transaction.type = transactionType;
-    console.log(transactionType);
   }
 
   onAddTransaction() {

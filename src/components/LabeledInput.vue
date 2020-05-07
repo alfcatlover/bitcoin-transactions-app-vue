@@ -45,7 +45,6 @@ export default class LabeledInput extends Vue {
   @Prop() private maxValue!: number;
 
   @Watch('maxValue') private watchMaxValue() {
-    console.log('watcher', this);
     this.onBlur();
   }
 
