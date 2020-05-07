@@ -19,7 +19,7 @@
         <td>{{transaction.quantityBtc}}</td>
         <td>${{transaction.btcPrice}} </td>
         <td>
-          ${{transaction.btcPrice}}
+          ${{transaction.btcPrice * transaction.quantityBtc}}
           <span class="small-text">Fee ${{transaction.feeUsd}}</span>
         </td>
       </tr>

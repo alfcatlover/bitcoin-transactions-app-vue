@@ -32,7 +32,7 @@ import { TransactionTypeEnum } from '@/enums';
 import { TransactionModel } from '@/types';
 import Button from '@/components/Button.vue';
 import LabeledInput from '@/components/LabeledInput.vue';
-import { Mutation, Action } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 
 @Component({
   components: {
@@ -46,6 +46,10 @@ export default class TransactionsForm extends Vue {
   transaction: TransactionModel = new TransactionModel();
 
   @Action('addTransaction') addTransaction: any;
+
+  @State('totalUsd') totalUsd: number;
+
+  @State('totalBtc') totalBtc: number;
 
   onChangeTransactionType(transactionType: TransactionTypeEnum): void {
     this.transaction.type = transactionType;

@@ -1,14 +1,17 @@
 <template>
   <div class="wrap">
     <label>{{label}}</label>
-<!--    <input v-if="type==='currency'"-->
-<!--           class="input"-->
-<!--           type="text"-->
-<!--           v-model="syncedValue"-->
-<!--           v-money="money"/>-->
-    <input class="input"
-           type="text"
-           v-model="syncedValue"/>
+    <imask-input v-if="type==='currency'"
+                 class="input"
+                 :mask="Number"
+                 thousandsSeparator=" "
+                 v-bind:scale="2"
+                 padFractionalZeros
+                 v-model="syncedValue"/>
+    <imask-input v-if="type==='text'"
+                 class="input"
+                 :mask="Number"
+                 v-model="syncedValue"/>
   </div>
 </template>
 
@@ -18,29 +21,32 @@ import {
   Prop,
   Vue,
 } from 'vue-property-decorator';
+import { VMoney } from 'v-money';
+import { IMaskDirective, IMaskComponent } from 'vue-imask';
 
-@Component
+@Component({
+  components: {
+    VMoney,
+    'imask-input': IMaskComponent,
+  },
+  directives: {
+    imask: IMaskDirective,
+  },
+})
 export default class LabeledInput extends Vue {
   @Prop() private label!: string;
 
   @Prop() private type!: string;
 
-  @Prop() private value!: string;
+  @Prop() private value!: number;
 
   get syncedValue(): string {
-    return this.value;
+    return this.value.toString();
   }
 
   set syncedValue(value: string) {
-    const newVal = parseFloat(value.replace('$', '').replace(/\s/g, '').replace(',', '.'));
-    this.$emit('update:value', newVal);
-  }
-
-  money = {
-    decimal: ',',
-    thousands: ' ',
-    prefix: '$ ',
-    precision: 2,
+    const floatVal = parseFloat(value.replace('$', '').replace(/\s/g, '').replace(',', '.'));
+    this.$emit('update:value', floatVal);
   }
 }
 </script>
