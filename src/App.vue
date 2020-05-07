@@ -17,6 +17,7 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+  *{ box-sizing: border-box}
   html {
     height: 100%;
   }
@@ -25,11 +26,11 @@ export default class App extends Vue {}
     color: #999999;
     font-family: 'Source Sans Pro', sans-serif;
     height: 100%;
+    margin: 0;
   }
   .app {
     height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
   }
 </style>

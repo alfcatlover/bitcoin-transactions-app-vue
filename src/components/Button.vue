@@ -1,5 +1,5 @@
 <template>
-  <button class="button" v-on:click="onClick">
+  <button class="button" v-bind:disabled="disabled" v-on:click="onClick">
     <slot></slot>
   </button>
 </template>
@@ -9,8 +9,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Button extends Vue {
+  @Prop() private disabled!: boolean;
+
   onClick() {
-    console.log(111);
     this.$emit('click');
   }
 }
@@ -31,7 +32,11 @@ export default class Button extends Vue {
     cursor: pointer;
     transition: background-color .25s ease-in-out;
     &:hover {
-      background: darken(#1774FF, 7);
+      background: darken(#1774FF, 10);
+    }
+    &:disabled {
+      cursor: default;
+      background: #1F2B37;
     }
   }
 </style>

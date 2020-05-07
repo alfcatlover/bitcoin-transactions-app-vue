@@ -1,10 +1,7 @@
 import { TransactionTypeEnum } from '@/enums';
 
 export interface AppState {
-  totalUsd: number;
-  totalBtc: number;
-  avgBuy: number;
-  avgSell: number;
+  startUsd: number;
   transactions: Array<TransactionModel>;
 }
 
@@ -24,9 +21,9 @@ export class TransactionModel {
   constructor() {
     this.date = new Date();
     this.type = TransactionTypeEnum.Buy;
-    this.quantityBtc = 1;
-    this.btcPrice = 2000;
-    this.feeUsd = 20;
+    this.quantityBtc = 0;
+    this.btcPrice = 0;
+    this.feeUsd = 0;
   }
 }
 

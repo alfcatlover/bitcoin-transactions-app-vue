@@ -14,15 +14,21 @@
       </div>
       <div class="tabs-body">
         <div class="tabs-col">
-          <LabeledInput type="text" label="Кол-во" v-bind:value.sync="transaction.quantityBtc"/>
+          <LabeledInput type="text" label="Кол-во"
+                        v-bind:maxValue="maxBtcToBuy"
+                        v-bind:value.sync="transaction.quantityBtc"/>
           <LabeledInput type="currency" label="Цена" v-bind:value.sync="transaction.btcPrice"/>
         </div>
         <div class="tabs-col">
           <LabeledInput type="currency" label="Комиссия" v-bind:value.sync="transaction.feeUsd"/>
         </div>
       </div>
+      <div>
+        disabled: {{disabled}}
+        maxBtcToBuy: {{maxBtcToBuy}}
+      </div>
     </div>
-    <Button v-on:click="onAddTransaction">Добавить</Button>
+    <Button v-bind:disabled="disabled" v-on:click="onAddTransaction">Добавить</Button>
   </div>
 </template>
 
@@ -32,7 +38,7 @@ import { TransactionTypeEnum } from '@/enums';
 import { TransactionModel } from '@/types';
 import Button from '@/components/Button.vue';
 import LabeledInput from '@/components/LabeledInput.vue';
-import { State, Action } from 'vuex-class';
+import { Getter, Action } from 'vuex-class';
 
 @Component({
   components: {
@@ -47,9 +53,33 @@ export default class TransactionsForm extends Vue {
 
   @Action('addTransaction') addTransaction: any;
 
-  @State('totalUsd') totalUsd: number;
+  @Getter('totalUsd') totalUsd: number;
 
-  @State('totalBtc') totalBtc: number;
+  @Getter('totalBtc') totalBtc: number;
+
+  get disabled() {
+    console.log('dis', this.transaction.btcPrice === 0 || this.transaction.quantityBtc === 0);
+    return !this.transaction.btcPrice || !this.transaction.quantityBtc;
+  }
+
+  get maxBtcToBuy() {
+    const {
+      transaction: {
+        type,
+        btcPrice = 0,
+        feeUsd = 0,
+      },
+    } = this;
+    const isSelling = type === this.transactionTypeEnum.Sell;
+    debugger;
+    if (isSelling) {
+      return this.totalBtc;
+    }
+    if (btcPrice === 0) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+    return (this.totalUsd / ((btcPrice || 1) + feeUsd)).toFixed(12);
+  }
 
   onChangeTransactionType(transactionType: TransactionTypeEnum): void {
     this.transaction.type = transactionType;
@@ -69,6 +99,7 @@ export default class TransactionsForm extends Vue {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 40px;
   }
   .tabs{
     margin-bottom: 24px;
@@ -93,8 +124,8 @@ export default class TransactionsForm extends Vue {
   }
   .tabs-body {
     background: #1F2B37;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
-    border-radius: 0 8px 8px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+    border-radius: 0 0 8px 8px;
     padding: 28px;
     display: flex;
   }

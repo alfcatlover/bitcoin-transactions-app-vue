@@ -4,8 +4,8 @@
       <p class="title">
         Количество USD: {{totalUsd}}
       </p>
-      <p>Средняя цена покупки BTC: {{avgBuy}}</p>
-      <p>Средняя цена продажи BTC: {{avgSell}}</p>
+      <p>Средняя цена покупки BTC: {{avg.buy}}</p>
+      <p>Средняя цена продажи BTC: {{avg.sell}}</p>
     </div>
     <div class="col">
       <p class="title">
@@ -16,20 +16,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { State } from 'vuex-class';
+import { Component, Vue } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 
 @Component
 export default class TransactionsInfo extends Vue {
-  @Prop() private sum!: number;
+  @Getter('totalUsd') totalUsd: number;
 
-  @State('totalUsd') totalUsd: number;
+  @Getter('totalBtc') totalBtc: number;
 
-  @State('totalBtc') totalBtc: number;
-
-  @State('avgBuy') avgBuy: number;
-
-  @State('avgSell') avgSell: number;
+  @Getter('avg') avg: number;
 }
 </script>
 

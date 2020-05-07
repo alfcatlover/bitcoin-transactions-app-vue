@@ -1,8 +1,8 @@
 <template>
   <div class="wrap">
-    <TransactionsInfo sum="100000"/>
-    <TransactionsList/>
+    <TransactionsInfo/>
     <TransactionsForm/>
+    <TransactionsList/>
   </div>
 </template>
 

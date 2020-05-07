@@ -9,43 +9,39 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    totalUsd: 1000000,
-    totalBtc: 0,
-    avgBuy: 0,
-    avgSell: 0,
+    startUsd: 100,
     transactions: [],
   } as AppState,
   mutations: {
     addTransaction(state: AppState, transaction: TransactionModel) {
-      state.transactions.push({
-        ...transaction,
-        id: uniqid(),
-        date: new Date(),
-      });
+      state.transactions.push(transaction);
     },
-    calcTotalBtc(state) {
-      state.totalBtc = state.transactions.reduce((acc, trans) => {
+  },
+  getters: {
+    totalUsd(state) {
+      const total = state.transactions.reduce((acc, trans) => {
+        const isBuying = trans.type === TransactionTypeEnum.Buy;
+        const sumUsd = trans.quantityBtc * trans.btcPrice;
+        if (isBuying) {
+          return acc - sumUsd - trans.feeUsd;
+        }
+        return acc + sumUsd - trans.feeUsd;
+      }, 0);
+      return (state.startUsd + total).toFixed(2);
+    },
+    totalBtc(state) {
+      const total = state.transactions.reduce((acc, trans) => {
         const isBuying = trans.type === TransactionTypeEnum.Buy;
         if (isBuying) {
           return acc + trans.quantityBtc;
         }
         return acc - trans.quantityBtc;
       }, 0);
+      return total.toFixed(12);
     },
-    calcTotalUsd(state) {
-      state.totalUsd += state.transactions.reduce((acc, trans) => {
-        debugger;
-        const isBuying = trans.type === TransactionTypeEnum.Buy;
-        const sumUsd = trans.quantityBtc * trans.btcPrice - trans.feeUsd;
-        if (isBuying) {
-          return acc - sumUsd;
-        }
-        return acc + sumUsd;
-      }, 0);
-    },
-    calcAvg(state) {
+    avg(state) {
       const total = state.transactions.reduce((acc, trans) => {
-        const sum = (trans.btcPrice * trans.quantityBtc);
+        const sum = (trans.btcPrice * trans.quantityBtc) + trans.feeUsd;
         if (trans.type === TransactionTypeEnum.Buy) {
           acc.buy += sum;
           acc.buyQuantity += 1;
@@ -61,19 +57,20 @@ export default new Vuex.Store({
         sellQuantity: 0,
       });
 
-      state.avgBuy = parseFloat((total.buy / (total.buyQuantity || 1)).toFixed(2));
-      state.avgSell = parseFloat((total.sell / (total.sellQuantity || 1)).toFixed(2));
+      return {
+        buy: parseFloat((total.buy / (total.buyQuantity || 1)).toFixed(2)),
+        sell: parseFloat((total.sell / (total.sellQuantity || 1)).toFixed(2)),
+      };
     },
   },
-  getters: {},
   actions: {
-    addTransaction({ commit }, transaction: TransactionModel) {
-      commit('addTransaction', transaction);
-      commit('calcTotalBtc');
-      commit('calcTotalUsd');
-      commit('calcAvg');
+    addTransaction({ commit }, transaction: TransactionModel): void {
+      commit('addTransaction', {
+        ...transaction,
+        id: uniqid(),
+        date: new Date(),
+      });
     },
   },
-  modules: {},
   plugins: [createPersistedState()],
 });
