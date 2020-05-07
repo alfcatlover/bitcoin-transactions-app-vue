@@ -23,10 +23,6 @@
           <LabeledInput type="currency" label="Комиссия" v-bind:value.sync="transaction.feeUsd"/>
         </div>
       </div>
-      <div>
-        disabled: {{disabled}}
-        maxBtcToBuy: {{maxBtcToBuy}}
-      </div>
     </div>
     <Button v-bind:disabled="disabled" v-on:click="onAddTransaction">Добавить</Button>
   </div>
